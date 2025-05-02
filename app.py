@@ -1,1 +1,70 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyPIlhQaaIIqbqbmokdcgEsc"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"0LJxTWV3P7b0"},"outputs":[],"source":["!pip install streamlit pyngrok\n","%%writefile app.py\n","import streamlit as st\n","\n","st.set_page_config(page_title=\"Mental Health Depression Detector\", layout=\"centered\")\n","\n","st.title(\"🧠 Mental Health Depression Detection\")\n","st.markdown(\"Please fill out the form below to assess depression severity and get personalized recommendations.\")\n","\n","with st.form(\"mental_health_form\"):\n","    st.markdown(\"### Demographic Information\")\n","    age = st.slider(\"Age\", 10, 100, 25)\n","    gender = st.selectbox(\"Gender\", [\"Male\", \"Female\", \"Other\"])\n","    occupation = st.text_input(\"Occupation\")\n","    location = st.text_input(\"Location\")\n","    marital_status = st.selectbox(\"Marital Status\", [\"Single\", \"Married\", \"Divorced\", \"Widowed\"])\n","    education_level = st.selectbox(\"Education Level\", [\"High School\", \"Bachelor's\", \"Master's\", \"Doctorate\", \"Other\"])\n","\n","    st.markdown(\"### Symptom Ratings (1 = None, 5 = Severe)\")\n","    symptoms = {\n","        \"Sleep Issue\": st.slider(\"Sleep Issue\", 1, 5),\n","        \"Appetite Issue\": st.slider(\"Appetite Issue\", 1, 5),\n","        \"Lack of Interest\": st.slider(\"Lack of Interest\", 1, 5),\n","        \"Fatigue\": st.slider(\"Fatigue\", 1, 5),\n","        \"Worthlessness\": st.slider(\"Feelings of Worthlessness\", 1, 5),\n","        \"Concentration Issue\": st.slider(\"Concentration Issue\", 1, 5),\n","        \"Agitation\": st.slider(\"Agitation\", 1, 5),\n","        \"Suicidal Ideation\": st.slider(\"Suicidal Ideation\", 1, 5),\n","        \"Sleep Disturbance\": st.slider(\"Sleep Disturbance\", 1, 5),\n","        \"Aggression\": st.slider(\"Aggression\", 1, 5),\n","        \"Panic Attacks\": st.slider(\"Panic Attacks\", 1, 5),\n","        \"Hopelessness\": st.slider(\"Hopelessness\", 1, 5),\n","        \"Restlessness\": st.slider(\"Restlessness\", 1, 5),\n","        \"Low Energy\": st.slider(\"Low Energy\", 1, 5)\n","    }\n","\n","    submit = st.form_submit_button(\"Predict Depression Severity\")\n","\n","if submit:\n","    total_score = sum(symptoms.values())\n","    if total_score < 35:\n","        severity = \"Mild\"\n","    elif total_score < 55:\n","        severity = \"Moderate\"\n","    else:\n","        severity = \"Severe\"\n","\n","    st.subheader(f\"🩺 Depression Severity: **{severity}**\")\n","\n","    st.markdown(\"### Recommendations:\")\n","    if symptoms[\"Sleep Issue\"] >= 4 or symptoms[\"Sleep Disturbance\"] >= 4:\n","        st.write(\"- Establish a regular sleep routine. Limit caffeine and screen time before bed.\")\n","    if symptoms[\"Suicidal Ideation\"] >= 4:\n","        st.write(\"- Seek emergency mental health support or call a crisis hotline immediately.\")\n","    if symptoms[\"Fatigue\"] >= 4 or symptoms[\"Low Energy\"] >= 4:\n","        st.write(\"- Light exercise and hydration can help restore energy.\")\n","    if symptoms[\"Hopelessness\"] >= 4 or symptoms[\"Worthlessness\"] >= 4:\n","        st.write(\"- Talk to a counselor or therapist. Journaling may also help process emotions.\")\n","    if symptoms[\"Panic Attacks\"] >= 4:\n","        st.write(\"- Try deep breathing exercises and avoid caffeine.\")\n","    if symptoms[\"Aggression\"] >= 4:\n","        st.write(\"- Practice anger management techniques or speak to a therapist.\")\n","    if symptoms[\"Appetite Issue\"] >= 4:\n","        st.write(\"- Eat small meals regularly; consult a dietitian if needed.\")\n","    if symptoms[\"Lack of Interest\"] >= 4:\n","        st.write(\"- Start with small enjoyable activities, even if motivation is low.\")\n","    if symptoms[\"Restlessness\"] >= 4:\n","        st.write(\"- Try grounding techniques or engage in structured tasks.\")\n","    if symptoms[\"Concentration Issue\"] >= 4:\n","        st.write(\"- Use lists, reminders, and reduce multitasking.\")\n","\n","    st.write(\"- General Tip: Mindfulness, CBT techniques, and social support are very beneficial.\")\n","!pip install streamlit pyngrok --quiet\n","from pyngrok import ngrok\n","import threading\n","import os\n","import time\n","\n","# Function to run the Streamlit app\n","def run_app():\n","    os.system(\"streamlit run app.py\")\n","\n","# Start the app in a separate thread\n","thread = threading.Thread(target=run_app)\n","thread.start()\n","\n","# Wait a moment for the server to start\n","time.sleep(5)\n","\n","# Expose the Streamlit app to the web\n","public_url = ngrok.connect(8501)\n","print(\"Streamlit app is running at:\", public_url)\n"]}]}
+import streamlit as st
+
+st.set_page_config(page_title="Mental Health Depression Detector", layout="centered")
+
+st.title("🧠 Mental Health Depression Detection")
+st.markdown("Please fill out the form below to assess depression severity and get personalized recommendations.")
+
+with st.form("mental_health_form"):
+    st.markdown("### Demographic Information")
+    age = st.slider("Age", 10, 100, 25)
+    gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+    occupation = st.text_input("Occupation")
+    location = st.text_input("Location")
+    marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced", "Widowed"])
+    education_level = st.selectbox("Education Level", ["High School", "Bachelor's", "Master's", "Doctorate", "Other"])
+
+    st.markdown("### Symptom Ratings (1 = None, 5 = Severe)")
+    symptoms = {
+        "Sleep Issue": st.slider("Sleep Issue", 1, 5),
+        "Appetite Issue": st.slider("Appetite Issue", 1, 5),
+        "Lack of Interest": st.slider("Lack of Interest", 1, 5),
+        "Fatigue": st.slider("Fatigue", 1, 5),
+        "Worthlessness": st.slider("Feelings of Worthlessness", 1, 5),
+        "Concentration Issue": st.slider("Concentration Issue", 1, 5),
+        "Agitation": st.slider("Agitation", 1, 5),
+        "Suicidal Ideation": st.slider("Suicidal Ideation", 1, 5),
+        "Sleep Disturbance": st.slider("Sleep Disturbance", 1, 5),
+        "Aggression": st.slider("Aggression", 1, 5),
+        "Panic Attacks": st.slider("Panic Attacks", 1, 5),
+        "Hopelessness": st.slider("Hopelessness", 1, 5),
+        "Restlessness": st.slider("Restlessness", 1, 5),
+        "Low Energy": st.slider("Low Energy", 1, 5)
+    }
+
+    submit = st.form_submit_button("Predict Depression Severity")
+
+if submit:
+    total_score = sum(symptoms.values())
+    if total_score < 35:
+        severity = "Mild"
+    elif total_score < 55:
+        severity = "Moderate"
+    else:
+        severity = "Severe"
+
+    st.subheader(f"🩺 Depression Severity: **{severity}**")
+    st.markdown("### Recommendations:")
+
+    if symptoms["Sleep Issue"] >= 4 or symptoms["Sleep Disturbance"] >= 4:
+        st.write("- Establish a regular sleep routine. Limit caffeine and screen time before bed.")
+    if symptoms["Suicidal Ideation"] >= 4:
+        st.write("- Seek emergency mental health support or call a crisis hotline immediately.")
+    if symptoms["Fatigue"] >= 4 or symptoms["Low Energy"] >= 4:
+        st.write("- Light exercise and hydration can help restore energy.")
+    if symptoms["Hopelessness"] >= 4 or symptoms["Worthlessness"] >= 4:
+        st.write("- Talk to a counselor or therapist. Journaling may also help process emotions.")
+    if symptoms["Panic Attacks"] >= 4:
+        st.write("- Try deep breathing exercises and avoid caffeine.")
+    if symptoms["Aggression"] >= 4:
+        st.write("- Practice anger management techniques or speak to a therapist.")
+    if symptoms["Appetite Issue"] >= 4:
+        st.write("- Eat small meals regularly; consult a dietitian if needed.")
+    if symptoms["Lack of Interest"] >= 4:
+        st.write("- Start with small enjoyable activities, even if motivation is low.")
+    if symptoms["Restlessness"] >= 4:
+        st.write("- Try grounding techniques or engage in structured tasks.")
+    if symptoms["Concentration Issue"] >= 4:
+        st.write("- Use lists, reminders, and reduce multitasking.")
+
+    st.write("- General Tip: Mindfulness, CBT techniques, and social support are very beneficial.")
